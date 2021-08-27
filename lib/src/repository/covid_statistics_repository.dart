@@ -152,7 +152,10 @@ class CovidStatisticsRepository {
 
   CovidStatisticsRepository() {
     _dio = Dio(BaseOptions(
-      baseUrl: 'http://openapi.data.go.kr',
+      /// 코로나 일별 현황
+      // baseUrl: 'http://openapi.data.go.kr',
+      /// 기상청 단기예보 조회
+      baseUrl: 'http://apis.data.go.kr',
       queryParameters: {
         'ServiceKey':
         'CWJbjyZDF4tcdWSfQl1Y7D0akUw1O60l7XdJ2jslvQeKkCfst7qLw0S20cngfj6bxz7Hvp71tsN5csOAoztR2Q=='
@@ -163,10 +166,38 @@ class CovidStatisticsRepository {
   Future<List<Covid19StatisticsModel>> fetchCovid19Statistics({String? startDate, String? endDate}) async {
 
     var query = Map<String, String>();
+    /// 코로나 일별 현황 파라미터
     if (startDate != null) query.putIfAbsent('startCreateDt', () => startDate);
     if (endDate != null) query.putIfAbsent('endCreateDt', () => endDate);
+
+    /// 코로나 일별 현황
     var response =
         await _dio.get('/openapi/service/rest/Covid19/getCovid19InfStateJson', queryParameters: query);
+    final document = XmlDocument.parse(response.data);
+    // final document = XmlDocument.parse(bookshelfXml);
+    final results = document.findAllElements('item');
+
+    if(results.isNotEmpty) {
+      // return Covid19StatisticsModel.fromXml(results.first);
+      return results.map<Covid19StatisticsModel>((element) => Covid19StatisticsModel.fromXml(element)).toList();
+    } else {
+      return Future.value(null);
+    }
+  }
+
+  Future<List<Covid19StatisticsModel>> fetchPredictWeather({String? dataType, String? baseDate, String? baseTime, String? nx, String? ny}) async {
+
+    var query = Map<String, String>();
+    /// 기상청_단기예보 조회 파라미터
+    if (dataType != null) query.putIfAbsent('dataType', () => dataType);
+    if (baseDate != null) query.putIfAbsent('base_date', () => baseDate);
+    if (baseTime != null) query.putIfAbsent('base_time', () => baseTime);
+    if (nx != null) query.putIfAbsent('nx', () => nx);
+    if (ny != null) query.putIfAbsent('ny', () => ny);
+
+    /// 기상청_단기예보 조회
+    var response =
+    await _dio.get('/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst', queryParameters: query);
     final document = XmlDocument.parse(response.data);
     // final document = XmlDocument.parse(bookshelfXml);
     final results = document.findAllElements('item');

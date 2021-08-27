@@ -18,9 +18,19 @@ class CovidStatisticsController extends GetxController {
   }
 
   void fetchCovidState() async {
-    var startDate = DateFormat('yyyyMMdd').format(DateTime.now().subtract(Duration(days: 7)));
-    var endDate = DateFormat('yyyyMMdd').format(DateTime.now());
-    var result = await _covidStatisticsRepository.fetchCovid19Statistics(startDate: startDate, endDate: endDate);
+    /// 코로나 파라미터
+    // var startDate = DateFormat('yyyyMMdd').format(DateTime.now().subtract(Duration(days: 7)));
+    // var endDate = DateFormat('yyyyMMdd').format(DateTime.now());
+    /// 기상청 예보 파라미터
+    var baseDate = DateFormat('yyyyMMdd').format(DateTime.now());
+    var dataType = 'XML';
+    var baseTime = '0630';
+    var nx = '55';
+    var ny = '127';
+    /// 코로나 파라미터
+    // var result = await _covidStatisticsRepository.fetchCovid19Statistics(startDate: startDate, endDate: endDate);
+    /// 기상청 예보 파라미터
+    var result = await _covidStatisticsRepository.fetchPredictWeather(dataType: dataType, baseDate: baseDate, baseTime: baseTime, nx: nx, ny: ny);
 
     if(result.isNotEmpty) {
       for(var i = 0; i < result.length; i++){
