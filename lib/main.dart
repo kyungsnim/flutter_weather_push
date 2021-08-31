@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather_push/src/app.dart';
 import 'package:flutter_weather_push/src/controller/covid_statistics_controller.dart';
+import 'package:flutter_weather_push/src/select_my_area.dart';
 import 'package:get/get.dart';
 
 void main() {
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: App(),
+      home: SelectMyArea(),//App(),
     );
   }
 }

@@ -5,6 +5,10 @@ import 'package:xml/xml.dart';
 class CovidStatisticsRepository {
   late var _dio;
 
+  final weatherTextXml = '''
+  <?xml version="1.0" encoding="UTF-8"?>
+<response><header><resultCode>00</resultCode><resultMsg>NORMAL_SERVICE</resultMsg></header><body><dataType>XML</dataType><items><item><baseDate>20210827</baseDate><baseTime>0630</baseTime><category>LGT</category><fcstDate>20210827</fcstDate><fcstTime>0700</fcstTime><fcstValue>0</fcstValue><nx>55</nx><ny>127</ny></item><item><baseDate>20210827</baseDate><baseTime>0630</baseTime><category>LGT</category><fcstDate>20210827</fcstDate><fcstTime>0800</fcstTime><fcstValue>0</fcstValue><nx>55</nx><ny>127</ny></item><item><baseDate>20210827</baseDate><baseTime>0630</baseTime><category>LGT</category><fcstDate>20210827</fcstDate><fcstTime>0900</fcstTime><fcstValue>0</fcstValue><nx>55</nx><ny>127</ny></item><item><baseDate>20210827</baseDate><baseTime>0630</baseTime><category>LGT</category><fcstDate>20210827</fcstDate><fcstTime>1000</fcstTime><fcstValue>0</fcstValue><nx>55</nx><ny>127</ny></item><item><baseDate>20210827</baseDate><baseTime>0630</baseTime><category>LGT</category><fcstDate>20210827</fcstDate><fcstTime>1100</fcstTime><fcstValue>0</fcstValue><nx>55</nx><ny>127</ny></item><item><baseDate>20210827</baseDate><baseTime>0630</baseTime><category>LGT</category><fcstDate>20210827</fcstDate><fcstTime>1200</fcstTime><fcstValue>0</fcstValue><nx>55</nx><ny>127</ny></item><item><baseDate>20210827</baseDate><baseTime>0630</baseTime><category>PTY</category><fcstDate>20210827</fcstDate><fcstTime>0700</fcstTime><fcstValue>5</fcstValue><nx>55</nx><ny>127</ny></item><item><baseDate>20210827</baseDate><baseTime>0630</baseTime><category>PTY</category><fcstDate>20210827</fcstDate><fcstTime>0800</fcstTime><fcstValue>1</fcstValue><nx>55</nx><ny>127</ny></item><item><baseDate>20210827</baseDate><baseTime>0630</baseTime><category>PTY</category><fcstDate>20210827</fcstDate><fcstTime>0900</fcstTime><fcstValue>1</fcstValue><nx>55</nx><ny>127</ny></item><item><baseDate>20210827</baseDate><baseTime>0630</baseTime><category>PTY</category><fcstDate>20210827</fcstDate><fcstTime>1000</fcstTime><fcstValue>1</fcstValue><nx>55</nx><ny>127</ny></item></items><numOfRows>10</numOfRows><pageNo>1</pageNo><totalCount>60</totalCount></body></response>
+  ''';
   final bookshelfXml = '''
   <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <response>
@@ -196,10 +200,11 @@ class CovidStatisticsRepository {
     if (ny != null) query.putIfAbsent('ny', () => ny);
 
     /// 기상청_단기예보 조회
-    var response =
-    await _dio.get('/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst', queryParameters: query);
-    final document = XmlDocument.parse(response.data);
+    // var response =
+    // await _dio.get('/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst', queryParameters: query);
+    // final document = XmlDocument.parse(response.data);
     // final document = XmlDocument.parse(bookshelfXml);
+    final document = XmlDocument.parse(weatherTextXml);
     final results = document.findAllElements('item');
 
     if(results.isNotEmpty) {
